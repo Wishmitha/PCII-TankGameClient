@@ -89,12 +89,6 @@
 Assets/Scripts/Bullet.cs
 Assets/Scripts/Coin.cs
 Assets/Scripts/Health.cs
-"Assets/Scripts/Old Scripts/BrickWall.cs"
-"Assets/Scripts/Old Scripts/ServerConnect_old.cs"
-"Assets/Scripts/Old Scripts/ServerListener_old.cs"
-"Assets/Scripts/Old Scripts/StoneWall.cs"
-"Assets/Scripts/Old Scripts/TankBehaviour.cs"
-"Assets/Scripts/Old Scripts/Water.cs"
 Assets/Scripts/ServerConnect.cs
 Assets/Scripts/ServerListener.cs
 Assets/Scripts/Tank.cs

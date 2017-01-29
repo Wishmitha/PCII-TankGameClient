@@ -72,7 +72,7 @@ public class ServerListener : MonoBehaviour
             coinsToDraw.RemoveAt(0);
             GameObject game = Instantiate(coin, c.getPosition(), initializingRotation) as GameObject;
             //Send data to coin. So that it can work independently later
-            game.SendMessage("setValues", new int[] { c.getTimeLeft(), c.getCoinValue() });
+            //game.SendMessage("setValues", new int[] { c.getTimeLeft(), c.getCoinValue() });
             UnityEngine.Debug.logger.Log("Coin   " + c.getX() + "," + c.getY() + " " + c.getCoinValue() + "  time" + c.getTimeLeft());
         }
         while (healthToDraw.Count > 0)

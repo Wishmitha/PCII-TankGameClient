@@ -86,11 +86,12 @@
 -define:UNITY_EDITOR_WIN
 -define:UNITY_TEAM_LICENSE
 -define:ENABLE_VSTU
-Assets/Scripts/BrickWall.cs
+Assets/Scripts/Bullet.cs
+Assets/Scripts/Coin.cs
+Assets/Scripts/Health.cs
 Assets/Scripts/ServerConnect.cs
 Assets/Scripts/ServerListener.cs
-Assets/Scripts/StoneWall.cs
-Assets/Scripts/TankBehaviour.cs
-Assets/Scripts/Water.cs
+Assets/Scripts/Tank.cs
+Assets/Scripts/Wall.cs
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Runtime.Serialization.dll"
 -r:"C:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Xml.Linq.dll"

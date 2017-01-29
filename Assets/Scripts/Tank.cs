@@ -69,7 +69,7 @@ public class Tank : MonoBehaviour {
                 //if not directed on the direction. first need to direct it to the direction
                 if (rotation==RIGHT && Mathf.Round(transform.position.x) < 9)
                 {
-                    addX = 1f;
+                    addX = 0.5f;
                     addY = 0f;
                     b = true;
                     colided = false;
@@ -90,7 +90,7 @@ public class Tank : MonoBehaviour {
                 
                 if (rotation==LEFT && Mathf.Round(transform.position.x )>= 1)
                 {
-                    addX = -1f;
+                    addX = -0.5f;
                     addY = 0f;
                     b = true;
                     colided = false;
@@ -110,7 +110,7 @@ public class Tank : MonoBehaviour {
                 
                 if (rotation==DOWN &&  Mathf.Round(transform.position.y) > -9)
                 {
-                    addY = -1f;
+                    addY = -0.5f;
                     addX = 0f;
                     b = true;
                     colided = false;
@@ -131,7 +131,7 @@ public class Tank : MonoBehaviour {
                 if (rotation==UP && Mathf.Round(transform.position.y) <= -1)
                 {
                     addX = 0f;
-                    addY = 1f;
+                    addY = 0.5f;
                     b = true;
                     colided = false;
                 }
@@ -144,7 +144,7 @@ public class Tank : MonoBehaviour {
                     b = true;
                     colided = false;
                 }
-            }else if (Input.GetKey(KeyCode.RightShift))
+            }else if (Input.GetKey(KeyCode.LeftControl))
             {
                 Debug.logger.Log("Firing");
                 Vector3 position = transform.position;
@@ -183,10 +183,13 @@ public class Tank : MonoBehaviour {
     public void OnCollisionEnter2D(Collision2D col)
      {
 
-        if (col.gameObject.name == "Wall" || col.gameObject.name == "Stone" || col.gameObject.name == "Water")
+        if (col.gameObject.tag == "Brick" || col.gameObject.tag == "Stone" || col.gameObject.tag == "Water")
         {
-            colided = true;
-            transform.position = position;
+
+            Debug.logger.Log("colided" + col.gameObject.tag);
+            //Debug.logger.Log("Hit hit hit hit hit hit hit hit hit hit hit hit hit hit hit");
+            //colided = true;
+            transform.position = prePosition;
         }
     }
 
