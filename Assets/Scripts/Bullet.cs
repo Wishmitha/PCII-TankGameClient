@@ -52,7 +52,7 @@ public class Bullet : MonoBehaviour {
     }
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Stone" || col.gameObject.tag == "Tank")
+        if (col.gameObject.tag == "Stone" || col.gameObject.tag == "Tank" || col.gameObject.tag=="Brick")
         {
             Destroy(gameObject);
         }

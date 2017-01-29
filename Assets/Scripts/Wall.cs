@@ -7,7 +7,9 @@ public class Wall : MonoBehaviour {
     // Use this for initialization
     public GameObject next;
 
-	void Start () {
+    int count = 0;
+
+    void Start () {
 		
 	}
 	
@@ -17,17 +19,26 @@ public class Wall : MonoBehaviour {
 	}
     void OnCollisionEnter2D(Collision2D col)
     {
+        
         Debug.logger.Log("colided"+ col.gameObject.tag);
-        if (col.gameObject.tag == "bullet")
+        if (col.gameObject.tag == "Bullet")
         {
-            Vector3 position = transform.position;
+            if(count == 12)
+            {
+                Destroy(gameObject);
+                count = 0;
+            }
+
+            count++;
+
+            /*Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
             Destroy(gameObject);
             if (next != null)
             {
                 Instantiate(next, position, rotation);
                 Debug.logger.Log("colided opa");
-            }
+            }*/
         }
     }
 }
