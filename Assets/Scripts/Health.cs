@@ -31,7 +31,7 @@ public class Health : MonoBehaviour {
     }
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.name == "Tank")
+        if (col.gameObject.tag == "Tank")
         {
             col.gameObject.SendMessage("healthGained");
             Destroy(gameObject);

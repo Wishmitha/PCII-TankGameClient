@@ -39,7 +39,7 @@ public class Coin : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D col)
     {
         Debug.logger.Log("colided");
-        if (col.gameObject.name == "Tank")
+        if (col.gameObject.tag == "Tank")
         {
             col.gameObject.SendMessage("coinAdded" ,value);
             Destroy(gameObject);

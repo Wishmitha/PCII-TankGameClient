@@ -37,6 +37,14 @@ public class ServerListener : MonoBehaviour
     public GameObject water;
     public GameObject health;
     public GameObject coin;
+
+    //added by me
+    /*public GameObject player2;
+    public GameObject player3;
+    public GameObject player4;
+    public GameObject player5;*/
+
+
     // Use this for initialization
     void Start()
     {
@@ -72,7 +80,7 @@ public class ServerListener : MonoBehaviour
             coinsToDraw.RemoveAt(0);
             GameObject game = Instantiate(coin, c.getPosition(), initializingRotation) as GameObject;
             //Send data to coin. So that it can work independently later
-            //game.SendMessage("setValues", new int[] { c.getTimeLeft(), c.getCoinValue() });
+            game.SendMessage("setValues", new int[] { c.getTimeLeft(), c.getCoinValue() });
             UnityEngine.Debug.logger.Log("Coin   " + c.getX() + "," + c.getY() + " " + c.getCoinValue() + "  time" + c.getTimeLeft());
         }
         while (healthToDraw.Count > 0)
@@ -162,6 +170,18 @@ public class ServerListener : MonoBehaviour
                     //UnityEngine.Debug.logger.Log("Health   " + healthPosition.x + "," + healthPosition.y + " " + healthCountTime);
                 }
                 // Call an external function (void) given. 
+
+                else if (datas[0].ToUpper().Equals("P2"))
+                {
+                    String[] cod = datas[1].Split(',');
+                    Vector3 healthPosition = new Vector3(Int32.Parse(cod[0]), -Int32.Parse(cod[1]));
+                    datas[2] = datas[2].Trim();
+                    datas[2] = datas[2].Substring(0, datas[2].Length - 2);
+                    int healthCountTime = Int32.Parse(datas[2]);
+                    HealthObject he = new HealthObject(healthPosition, healthCountTime);
+                    healthToDraw.Add(he);
+                    //UnityEngine.Debug.logger.Log("Health   " + healthPosition.x + "," + healthPosition.y + " " + healthCountTime);
+                }
 
             }
         }
