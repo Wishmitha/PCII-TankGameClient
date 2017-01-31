@@ -64,6 +64,12 @@
     <Reference Include="Mono.Cecil">
       <HintPath>Library\UnityAssemblies\Mono.Cecil.dll</HintPath>
     </Reference>
+    <Reference Include="InputSimulator">
+      <HintPath>Assets\InputSimulator.0.1.0.0-bin\Debug\InputSimulator.dll</HintPath>
+    </Reference>
+    <Reference Include="InputSimulator">
+      <HintPath>Assets\InputSimulator.0.1.0.0-bin\Release\InputSimulator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Bullet.cs" />
@@ -74,6 +80,10 @@
     <Compile Include="Assets\Scripts\Tank.cs" />
     <Compile Include="Assets\Scripts\Wall.cs" />
     <Compile Include="Assets\Scripts\initial.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\InputSimulator.0.1.0.0-bin\Debug\InputSimulator.XML" />
+    <None Include="Assets\InputSimulator.0.1.0.0-bin\Release\InputSimulator.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

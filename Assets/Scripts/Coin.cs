@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Coin : MonoBehaviour {
 
-    // Use this for initialization
     int value;
     float timeLeft;
     bool b = true;
@@ -12,7 +11,6 @@ public class Coin : MonoBehaviour {
         
     }
 	
-	// Update is called once per frame
 	void Update () {
         if (!b)
         {
@@ -20,7 +18,7 @@ public class Coin : MonoBehaviour {
             timeLeft -= Time.deltaTime*1000;
             if (timeLeft < 0)
             {
-                UnityEngine.Debug.logger.Log("Coin  vanished " + value + "  time" + timeLeft+" "+Time.time);
+                Debug.logger.Log("Coin  vanished " + value + "  time" + timeLeft+" "+Time.time);
                 Destroy(gameObject);
             }
         }
@@ -32,16 +30,14 @@ public class Coin : MonoBehaviour {
         this.timeLeft = data[0];
         this.value = data[1];
         b = false;
-        UnityEngine.Debug.logger.Log("Coin  start " + value + "  time" + timeLeft + " " + Time.time);
-        //Debug.logger.Log("Values set"+timeLeft);
-
+        Debug.logger.Log("Coin  start " + value + "  time" + timeLeft + " " + Time.time);
     }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         Debug.logger.Log("colided");
         if (col.gameObject.tag == "Tank")
         {
-            //col.gameObject.SendMessage("coinAdded" ,value);
             Destroy(gameObject);
             Debug.logger.Log("Destroyed");
         }

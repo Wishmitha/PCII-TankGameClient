@@ -2,8 +2,6 @@
 using System;
 using System.Net.Sockets;
 using System.Text;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 
@@ -17,6 +15,7 @@ public class ServerConnect : MonoBehaviour
     public static readonly String Down = "DOWN#";
     public static readonly String Left = "LEFT#";
     public static readonly String Right = "RIGHT#";
+    public int x=1;
 
     void Start()
     {
@@ -28,6 +27,11 @@ public class ServerConnect : MonoBehaviour
                 client.GetStream().Write(byteData, 0, byteData.Length);
             }
             Console.WriteLine("Connected");
+
+            InvokeRepeating("move", 0, 1);
+
+            /*string[] dir = {"right","left","up","down","shoot" };
+            InvokeRepeating(dir[x], 0, 1);*/
         }
         catch (Exception ex)
         {
@@ -39,6 +43,9 @@ public class ServerConnect : MonoBehaviour
 
     void Update()
     {
+        System.Random rnd = new System.Random();
+        x = rnd.Next(0, 10000) % 10;
+
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             Debug.Log("up is called");
@@ -65,6 +72,7 @@ public class ServerConnect : MonoBehaviour
         {
             new Thread(shoot).Start();
         }
+
     }
     public  void up()
     {
@@ -102,6 +110,30 @@ public class ServerConnect : MonoBehaviour
         {
 
             System.Diagnostics.Debug.WriteLine(ex);
+        }
+    }
+
+    public void move()
+    {
+        int y = x;
+
+        if (y == 0 || y==3 || y==5 || y==7)
+        {
+            right();
+
+        }else if (y == 1)
+        {
+            left();
+        }else if (y==2)
+        {
+            up();
+        }else if (y == 4 || y==6)
+        {
+            down();
+        }
+        else
+        {
+            shoot();
         }
     }
 }

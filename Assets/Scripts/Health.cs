@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Health : MonoBehaviour {
 
-    // Use this for initialization
     float timeLeft;
     bool b = true;
     void Start () {
 	
 	}
 	
-	// Update is called once per frame
 	void Update () {
         if (!b)
         
@@ -18,7 +15,7 @@ public class Health : MonoBehaviour {
             timeLeft -= Time.deltaTime * 1000;
             if (timeLeft < 0)
             {
-                UnityEngine.Debug.logger.Log("Health  vanished "  + "  time" + Time.time);
+                Debug.logger.Log("Health  vanished "  + "  time" + Time.time);
                 Destroy(gameObject);
             }
         }
@@ -33,7 +30,6 @@ public class Health : MonoBehaviour {
     {
         if (col.gameObject.tag == "Tank")
         {
-            //col.gameObject.SendMessage("healthGained");
             Destroy(gameObject);
         }
     }

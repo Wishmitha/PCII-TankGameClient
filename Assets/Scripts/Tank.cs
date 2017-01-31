@@ -5,7 +5,6 @@ public class Tank : MonoBehaviour {
 
     public GameObject bullet;
 
-    // Use this for initialization
     private static readonly int UP = 0;
     private static readonly int RIGHT = 1;
     private static readonly int DOWN = 2;
@@ -13,17 +12,18 @@ public class Tank : MonoBehaviour {
 
     float speed = 5;
     Vector3 position;
-    //preposition stores the position before a movement occurs. if a collision occurs. tank will get this cordinate
     Vector3 prePosition;
     bool b = false;
     float t = 10;
     Quaternion initRotation;
-    //distance that tank goes for 0,1 seconds
+
     float addY = 0;
     float addX = 0;
     bool colided = false;
     int rotation = UP;
     int coinCollected;
+
+
 
     void Start () {
         initRotation = transform.rotation;
@@ -31,10 +31,8 @@ public class Tank : MonoBehaviour {
         prePosition = position;
 	}
 
-    // Update is called once per frame
     void Update()
     {
-        //b is used to restrict continues movemen. inputs will be taken one for one sec
         if (b)
         {
             if (t == 10)
@@ -42,9 +40,8 @@ public class Tank : MonoBehaviour {
                 prePosition.x = position.x;
                 prePosition.y = position.y;
             }
-            //t gets 10 when a key is pressed. 10 should go to 0 in one sec
             t -= Time.deltaTime*10;
-            //if a collision occurs b will be false.
+
             if (!colided)
             {
                 position.x = transform.position.x + addX*Time.deltaTime;
@@ -59,14 +56,9 @@ public class Tank : MonoBehaviour {
         }
         else
         {
-            //Subtractions some time get answers like 2.9999 instead of 3. This is to solve that issue
-            /*position.x = Mathf.Round(transform.position.x);
-            position.y = Mathf.Round(transform.position.y);
-            transform.position = position;*/
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 Debug.logger.Log("dfg"+Mathf.Round(transform.position.x)+"  " + (Mathf.Round(transform.position.y)));
-                //if not directed on the direction. first need to direct it to the direction
                 if (rotation==RIGHT && Mathf.Round(transform.position.x) < 9)
                 {
                     addX = 1f;
@@ -76,7 +68,6 @@ public class Tank : MonoBehaviour {
                 }
                 else
                 {
-                    //rotate in direction
                     transform.rotation = initRotation * Quaternion.Euler(0, 0, -90);
                     rotation = RIGHT;
                     addX = 0f;

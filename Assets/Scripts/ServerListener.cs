@@ -5,6 +5,8 @@ using System.Text;
 using System.Net;
 using System.Collections.Generic;
 
+using WindowsInput;
+
 
 public class ServerListener : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class ServerListener : MonoBehaviour
     Quaternion initializingRotation;
     private bool bordcreated = true;
 
+    //ServerConnect sc = new ServerConnect();
+
     public GameObject wall;
     public GameObject stone;
     public GameObject water;
@@ -20,12 +24,7 @@ public class ServerListener : MonoBehaviour
     public GameObject coin;
     public GameObject tank;
 
-    /*public GameObject P0 = null;
-    public GameObject P1 = null;
-    public GameObject P2 = null;
-    public GameObject P3 = null;
-    public GameObject P4 = null;
-    public GameObject P5 = null;*/
+    public GameObject player;
 
     private List<Vector3> wallList = new List<Vector3>();
     private List<Vector3> stoneList = new List<Vector3>();
@@ -34,10 +33,10 @@ public class ServerListener : MonoBehaviour
     List<CoinObject> coinsToDraw = new List<CoinObject>();
     List<HealthObject> healthToDraw = new List<HealthObject>();
 
-    //List<GameObject> toDestroy = new List<GameObject>();
     Queue<object> toInstanciate = new Queue<object>();
 
-    // Use this for initialization
+    bool isInstanciate = false;
+
     void Start()
     {
         initializingRotation = transform.rotation;
@@ -45,7 +44,6 @@ public class ServerListener : MonoBehaviour
         thread.Start();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -85,22 +83,12 @@ public class ServerListener : MonoBehaviour
             UnityEngine.Debug.logger.Log("Health   " + c.getX() + "," + c.getY() + "  time" + c.getTimeLeft());
         }
 
-        /*while (toInstanciate.Count > 0)
-        {
-            GameObject t = toInstanciate[0];
-            toInstanciate.RemoveAt(0);
-            GameObject game = Instantiate(health, c.getPosition(), initializingRotation) as GameObject;
-
-
-        }*/
-
-        
-
         while(toInstanciate.Count>0)
         {
 
             //toInstanciate.RemoveAt(0);
             List<string> list = toInstanciate.Dequeue() as List<string>;
+            
 
             String[] cod = list[1].ToString().Split(',');
             Vector3 pPosition = new Vector3(Int32.Parse(cod[0]), -Int32.Parse(cod[1]));
@@ -124,87 +112,50 @@ public class ServerListener : MonoBehaviour
                 rotation = Quaternion.Euler(0, 0, 90);
             }
 
-            if (list[0].ToString()=="P0")
+            /*if (list[0].ToString()=="P0")
             {
-                GameObject clone = (GameObject)Instantiate(tank,pPosition, rotation);
-                Destroy(clone, 1.23f);
-
-                /*if (P0 != null)
+                if (!isInstanciate)
                 {
-                    //DestroyImmediate(P0, true);
-                    P0.GetComponent<Renderer>().enabled = false;
+                    GameObject clone = (GameObject)Instantiate(player, pPosition, rotation);
+                    //Destroy(clone, 1.25f);
+                    isInstanciate = true;
                 }
-                P0.GetComponent<Renderer>().enabled = true;
-                P0 = Instantiate(tank, pPosition, rotation) as GameObject;*/
+            }*/
+
+            if (list[0].ToString() == "P0")
+            {
+                 GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
+                 Destroy(clone, 1.25f);
             }
 
             if (list[0].ToString() == "P1")
             {
                 GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
                 Destroy(clone, 1.25f);
-
-                /*if (P1 != null)
-                {
-                    //DestroyImmediate(P1,true);
-                    P1.GetComponent<Renderer>().enabled = false;
-                }
-                P1.GetComponent<Renderer>().enabled = true;
-                P1 = Instantiate(tank, pPosition, rotation) as GameObject;*/
             }
 
             if (list[0].ToString() == "P2")
             {
                 GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
                 Destroy(clone, 1.25f);
-
-                /*if (P2 != null)
-                {
-                    //DestroyImmediate(P2, true);
-                    P2.GetComponent<Renderer>().enabled = false;
-                }
-                P2.GetComponent<Renderer>().enabled = true;
-                P2 = Instantiate(tank, pPosition, rotation) as GameObject;*/
             }
 
             if (list[0].ToString() == "P3")
             {
                 GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
                 Destroy(clone, 1.25f);
-                /*if (P3 != null)
-                {
-                    //DestroyImmediate(P3, true);
-                    P3.GetComponent<Renderer>().enabled = false;
-                }
-                P3.GetComponent<Renderer>().enabled = true;
-                P3 = Instantiate(tank, pPosition, rotation) as GameObject;*/
             }
 
             if (list[0].ToString() == "P4")
             {
                 GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
                 Destroy(clone, 1.25f);
-
-                /*if (P4 != null)
-                {
-                    //DestroyImmediate(P4, true);
-                    P4.GetComponent<Renderer>().enabled = false;
-                }
-                P4.GetComponent<Renderer>().enabled = true;
-                P4 = Instantiate(tank, pPosition, rotation) as GameObject;*/
             }
 
             if (list[0].ToString() == "P5")
             {
                 GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
                 Destroy(clone, 1.25f);
-
-                /*if (P5 != null)
-                {
-                    //DestroyImmediate(P5, true);
-                    P5.GetComponent<Renderer>().enabled = false;
-                }
-                P5.GetComponent<Renderer>().enabled = true;
-                P5 = Instantiate(tank, pPosition, rotation) as GameObject;*/
             }
 
         }
@@ -281,29 +232,6 @@ public class ServerListener : MonoBehaviour
                         String[] pdata = tanks[i].Split(';');
                         if (true)
                         {
-                            /*String[] cod = pdata[1].Split(',');
-
-                            Vector3 pPosition = new Vector3(Int32.Parse(cod[0]), -Int32.Parse(cod[1]));
-                            Quaternion rotation = Quaternion.Euler(0, 0, 0);
-
-                            int pDirection = Int32.Parse(pdata[2]);
-                            if (pDirection == 0)
-                            {
-                                rotation = Quaternion.Euler(0, 0, 0);
-                            }
-                            if (pDirection == 1)
-                            {
-                                rotation = Quaternion.Euler(0, 0, 90);
-                            }
-                            if (pDirection == 2)
-                            {
-                                rotation = Quaternion.Euler(0, 0, 180);
-                            }
-                            if (pDirection == 3)
-                            {
-                                rotation = Quaternion.Euler(0, 0, -90);
-                            }*/
-
                             String pShot = pdata[3];
                             String pHealth = pdata[4];
                             String pCoins = pdata[5];
@@ -315,67 +243,6 @@ public class ServerListener : MonoBehaviour
                             temp.Add(pdata[2]);
 
                             toInstanciate.Enqueue(temp);
-
-                            /*if (pdata[0].Equals("P0"))
-                            {
-                                if (P0 != null)
-                                {
-                                    //Destroy(P0);
-                                    toDestroy.Add(P0);
-                                }
-                                //P0 = Instantiate(tank, pPosition, rotation) as GameObject;
-                                toInstanciate.Add(temp);
-                            }
-                            if (pdata[0].Equals("P1"))
-                            {
-                                if (P1 != null)
-                                {
-                                    //Destroy(P1);
-                                    toDestroy.Add(P1);
-                                }
-                                //P1 = Instantiate(tank, pPosition, rotation) as GameObject;
-                                toInstanciate.Add(temp);
-                            }
-                            if (pdata[0].Equals("P2"))
-                            {
-                                if (P2 != null)
-                                {
-                                    //Destroy(P2);
-                                    toDestroy.Add(P2);
-                                }
-                                //P2 = Instantiate(tank, pPosition, rotation) as GameObject
-                                toInstanciate.Add(temp);
-                            }
-                            if (pdata[0].Equals("P3"))
-                            {
-                                if (P3 != null)
-                                {
-                                    //Destroy(P3);
-                                    toDestroy.Add(P3);
-                                }
-                                //P3 = Instantiate(tank, pPosition, rotation) as GameObject;
-                                toInstanciate.Add(temp);
-                            }
-                            if (pdata[0].Equals("P4"))
-                            {
-                                if (P4 != null)
-                                {
-                                    //Destroy(P4
-                                    toDestroy.Add(P4);
-                                }
-                                //P4 = Instantiate(tank, pPosition, rotation) as GameObject;
-                                toInstanciate.Add(temp);
-                            }
-                            if (pdata[0].Equals("P5"))
-                            {
-                                if (P5 != null)
-                                {
-                                    //Destroy(P5);
-                                    toDestroy.Add(P5);
-                                }
-                                //P5 = Instantiate(tank, pPosition, rotation) as GameObject;
-                                toInstanciate.Add(temp);
-                            }*/
                         }
                     }
                 }
@@ -402,7 +269,6 @@ public class ServerListener : MonoBehaviour
 
     }
 
-    //inner class for coin
     class CoinObject
     {
         Vector3 position;
@@ -438,7 +304,6 @@ public class ServerListener : MonoBehaviour
 
     }
 
-    //inner class for health
     class HealthObject
     {
         Vector3 position;
@@ -466,7 +331,5 @@ public class ServerListener : MonoBehaviour
         }
 
     }
-
-
 }
 
