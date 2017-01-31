@@ -2,11 +2,8 @@
 using System;
 using System.Net.Sockets;
 using System.Text;
-
 using System.IO;
-
 using System.Runtime.CompilerServices;
-
 using System.Threading;
 
 
@@ -20,8 +17,7 @@ public class ServerConnect : MonoBehaviour
     public static readonly String Down = "DOWN#";
     public static readonly String Left = "LEFT#";
     public static readonly String Right = "RIGHT#";
-    //public static 
-    // Use this for initialization
+
     void Start()
     {
         try
@@ -41,34 +37,33 @@ public class ServerConnect : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            UnityEngine.Debug.Log("up is called");
-            new System.Threading.Thread(up).Start();
+            Debug.Log("up is called");
+            new Thread(up).Start();
 
 
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            new System.Threading.Thread(down).Start();
+            new Thread(down).Start();
 
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            new System.Threading.Thread(left).Start();
+            new Thread(left).Start();
 
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            new System.Threading.Thread(right).Start();
+            new Thread(right).Start();
 
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
-            new System.Threading.Thread(shoot).Start();
+            new Thread(shoot).Start();
         }
     }
     public  void up()

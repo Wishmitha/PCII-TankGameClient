@@ -41,7 +41,7 @@ public class Coin : MonoBehaviour {
         Debug.logger.Log("colided");
         if (col.gameObject.tag == "Tank")
         {
-            col.gameObject.SendMessage("coinAdded" ,value);
+            //col.gameObject.SendMessage("coinAdded" ,value);
             Destroy(gameObject);
             Debug.logger.Log("Destroyed");
         }

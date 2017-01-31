@@ -33,7 +33,7 @@ public class Health : MonoBehaviour {
     {
         if (col.gameObject.tag == "Tank")
         {
-            col.gameObject.SendMessage("healthGained");
+            //col.gameObject.SendMessage("healthGained");
             Destroy(gameObject);
         }
     }

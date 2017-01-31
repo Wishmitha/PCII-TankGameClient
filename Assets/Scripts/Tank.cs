@@ -69,7 +69,7 @@ public class Tank : MonoBehaviour {
                 //if not directed on the direction. first need to direct it to the direction
                 if (rotation==RIGHT && Mathf.Round(transform.position.x) < 9)
                 {
-                    addX = 0.5f;
+                    addX = 1f;
                     addY = 0f;
                     b = true;
                     colided = false;
@@ -90,7 +90,7 @@ public class Tank : MonoBehaviour {
                 
                 if (rotation==LEFT && Mathf.Round(transform.position.x )>= 1)
                 {
-                    addX = -0.5f;
+                    addX = -1f;
                     addY = 0f;
                     b = true;
                     colided = false;
@@ -110,7 +110,7 @@ public class Tank : MonoBehaviour {
                 
                 if (rotation==DOWN &&  Mathf.Round(transform.position.y) > -9)
                 {
-                    addY = -0.5f;
+                    addY = -1f;
                     addX = 0f;
                     b = true;
                     colided = false;
@@ -131,7 +131,7 @@ public class Tank : MonoBehaviour {
                 if (rotation==UP && Mathf.Round(transform.position.y) <= -1)
                 {
                     addX = 0f;
-                    addY = 0.5f;
+                    addY = 1f;
                     b = true;
                     colided = false;
                 }
@@ -201,5 +201,10 @@ public class Tank : MonoBehaviour {
     public void healthGained()
     {
         Debug.logger.Log("Health restores");
+    }
+
+    public void instantiate()
+    {
+
     }
 }

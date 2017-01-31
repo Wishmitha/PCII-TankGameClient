@@ -3,119 +3,228 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Net;
-
+using System.Collections.Generic;
 
 
 public class ServerListener : MonoBehaviour
 {
 
     public bool isconnection;
-
     Quaternion initializingRotation;
-    /*
-    Server messages are recived in a thread. but in unity can't draw images as soon as we get data.
-    Those images should be created when and only when update method is called.
-    Hence we sore server message's data in below. And later in update they are created
-    */
-    //Initializing details
-    private System.Collections.Generic.List<Vector3> walles = new System.Collections.Generic.List<Vector3>();
-    private System.Collections.Generic.List<Vector3> stones = new System.Collections.Generic.List<Vector3>();
-    private System.Collections.Generic.List<Vector3> waters = new System.Collections.Generic.List<Vector3>();
-    private bool bordInitialized = true;
-    //Coin emerging details
+    private bool bordcreated = true;
 
-    System.Collections.Generic.List<CoinObject> coinsToDraw = new System.Collections.Generic.List<CoinObject>();
-
-
-    //Health emerging details
-
-    System.Collections.Generic.List<HealthObject> healthToDraw = new System.Collections.Generic.List<HealthObject>();
-
-    //Prefabs that need for the scinario
     public GameObject wall;
     public GameObject stone;
     public GameObject water;
     public GameObject health;
     public GameObject coin;
+    public GameObject tank;
 
-    //added by me
-    /*public GameObject player2;
-    public GameObject player3;
-    public GameObject player4;
-    public GameObject player5;*/
+    /*public GameObject P0 = null;
+    public GameObject P1 = null;
+    public GameObject P2 = null;
+    public GameObject P3 = null;
+    public GameObject P4 = null;
+    public GameObject P5 = null;*/
 
+    private List<Vector3> wallList = new List<Vector3>();
+    private List<Vector3> stoneList = new List<Vector3>();
+    private List<Vector3> waterList = new List<Vector3>();
+
+    List<CoinObject> coinsToDraw = new List<CoinObject>();
+    List<HealthObject> healthToDraw = new List<HealthObject>();
+
+    //List<GameObject> toDestroy = new List<GameObject>();
+    Queue<object> toInstanciate = new Queue<object>();
 
     // Use this for initialization
     void Start()
     {
-        //Console.WriteLine("Thread is comming on the way");
         initializingRotation = transform.rotation;
-        //UnityEngine.Debug.logger.Log("Thread is comming on the way");
         var thread = new System.Threading.Thread(listen);
         thread.Start();
-
     }
+
+    // Update is called once per frame
     void Update()
     {
-        //initialize bord if data had recevied
-        if (!bordInitialized)
+
+        if (!bordcreated)
         {
-            foreach (Vector3 vec in walles)
+            foreach (Vector3 vec in wallList)
             {
                 Instantiate(wall, vec, initializingRotation);
             }
-            foreach (Vector3 vec in stones)
+            foreach (Vector3 vec in stoneList)
             {
                 Instantiate(stone, vec, initializingRotation);
             }
-            foreach (Vector3 vec in waters)
+            foreach (Vector3 vec in waterList)
             {
                 Instantiate(water, vec, initializingRotation);
             }
-            bordInitialized = true;
+
+            bordcreated = true;
         }
+
         while (coinsToDraw.Count > 0)
         {
             CoinObject c = coinsToDraw[0];
             coinsToDraw.RemoveAt(0);
             GameObject game = Instantiate(coin, c.getPosition(), initializingRotation) as GameObject;
-            //Send data to coin. So that it can work independently later
             game.SendMessage("setValues", new int[] { c.getTimeLeft(), c.getCoinValue() });
             UnityEngine.Debug.logger.Log("Coin   " + c.getX() + "," + c.getY() + " " + c.getCoinValue() + "  time" + c.getTimeLeft());
         }
+
         while (healthToDraw.Count > 0)
         {
             HealthObject c = healthToDraw[0];
             healthToDraw.RemoveAt(0);
             GameObject game = Instantiate(health, c.getPosition(), initializingRotation) as GameObject;
-            //Send data to coin. So that it can work independently later
             game.SendMessage("setValues", c.getTimeLeft());
-            UnityEngine.Debug.logger.Log("Health   " + c.getX() + "," + c.getY()  + "  time" + c.getTimeLeft());
+            UnityEngine.Debug.logger.Log("Health   " + c.getX() + "," + c.getY() + "  time" + c.getTimeLeft());
         }
+
+        /*while (toInstanciate.Count > 0)
+        {
+            GameObject t = toInstanciate[0];
+            toInstanciate.RemoveAt(0);
+            GameObject game = Instantiate(health, c.getPosition(), initializingRotation) as GameObject;
+
+
+        }*/
+
         
+
+        while(toInstanciate.Count>0)
+        {
+
+            //toInstanciate.RemoveAt(0);
+            List<string> list = toInstanciate.Dequeue() as List<string>;
+
+            String[] cod = list[1].ToString().Split(',');
+            Vector3 pPosition = new Vector3(Int32.Parse(cod[0]), -Int32.Parse(cod[1]));
+
+            Quaternion rotation = Quaternion.Euler(0, 0, 0);
+            int pDirection = Int32.Parse(list[2].ToString());
+            if (pDirection == 0)
+            {
+                rotation = Quaternion.Euler(0, 0, 0);
+            }
+            if (pDirection == 1)
+            {
+                rotation = Quaternion.Euler(0, 0, -90);
+            }
+            if (pDirection == 2)
+            {
+                rotation = Quaternion.Euler(0, 0, 180);
+            }
+            if (pDirection == 3)
+            {
+                rotation = Quaternion.Euler(0, 0, 90);
+            }
+
+            if (list[0].ToString()=="P0")
+            {
+                GameObject clone = (GameObject)Instantiate(tank,pPosition, rotation);
+                Destroy(clone, 1.23f);
+
+                /*if (P0 != null)
+                {
+                    //DestroyImmediate(P0, true);
+                    P0.GetComponent<Renderer>().enabled = false;
+                }
+                P0.GetComponent<Renderer>().enabled = true;
+                P0 = Instantiate(tank, pPosition, rotation) as GameObject;*/
+            }
+
+            if (list[0].ToString() == "P1")
+            {
+                GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
+                Destroy(clone, 1.25f);
+
+                /*if (P1 != null)
+                {
+                    //DestroyImmediate(P1,true);
+                    P1.GetComponent<Renderer>().enabled = false;
+                }
+                P1.GetComponent<Renderer>().enabled = true;
+                P1 = Instantiate(tank, pPosition, rotation) as GameObject;*/
+            }
+
+            if (list[0].ToString() == "P2")
+            {
+                GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
+                Destroy(clone, 1.25f);
+
+                /*if (P2 != null)
+                {
+                    //DestroyImmediate(P2, true);
+                    P2.GetComponent<Renderer>().enabled = false;
+                }
+                P2.GetComponent<Renderer>().enabled = true;
+                P2 = Instantiate(tank, pPosition, rotation) as GameObject;*/
+            }
+
+            if (list[0].ToString() == "P3")
+            {
+                GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
+                Destroy(clone, 1.25f);
+                /*if (P3 != null)
+                {
+                    //DestroyImmediate(P3, true);
+                    P3.GetComponent<Renderer>().enabled = false;
+                }
+                P3.GetComponent<Renderer>().enabled = true;
+                P3 = Instantiate(tank, pPosition, rotation) as GameObject;*/
+            }
+
+            if (list[0].ToString() == "P4")
+            {
+                GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
+                Destroy(clone, 1.25f);
+
+                /*if (P4 != null)
+                {
+                    //DestroyImmediate(P4, true);
+                    P4.GetComponent<Renderer>().enabled = false;
+                }
+                P4.GetComponent<Renderer>().enabled = true;
+                P4 = Instantiate(tank, pPosition, rotation) as GameObject;*/
+            }
+
+            if (list[0].ToString() == "P5")
+            {
+                GameObject clone = (GameObject)Instantiate(tank, pPosition, rotation);
+                Destroy(clone, 1.25f);
+
+                /*if (P5 != null)
+                {
+                    //DestroyImmediate(P5, true);
+                    P5.GetComponent<Renderer>().enabled = false;
+                }
+                P5.GetComponent<Renderer>().enabled = true;
+                P5 = Instantiate(tank, pPosition, rotation) as GameObject;*/
+            }
+
+        }
+
     }
-   
+
     void listen()
     {
         try
         {
-            //UnityEngine.Debug.logger.Log("Thread started");
-            // Create the listener providing the IP Address and the port to listen on.
             var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
             listener.Start();
 
-            // Listen in an endless loop. 
             while (true)
             {
-                // We will store the textual representation of the bytes we receive. 
                 string value;
 
-                // Accept the sender and take message as a stream. 
                 using (var networkStream = listener.AcceptTcpClient().GetStream())
                 {
-                    // Create a memory stream to copy the message. 
-
-                    var bytes = new System.Collections.Generic.List<byte>();
+                    var bytes = new List<byte>();
 
                     int asw = 0;
                     while (asw != -1)
@@ -124,26 +233,21 @@ public class ServerListener : MonoBehaviour
                         bytes.Add((Byte)asw);
                     }
 
-                    // Convert bytes to text. 
                     value = Encoding.UTF8.GetString(bytes.ToArray());
 
                 }
                 String[] datas = value.Split(':');
-                //UnityEngine.Debug.logger.Log(datas[0]+"   "+value);
                 if (datas[0].Equals("I"))
                 {
 
                     String walls = datas[2];
-                    walles = getVecotors(walls);
+                    wallList = getVecotors(walls);
                     String stone = datas[3];
-                    stones = getVecotors(stone);
+                    stoneList = getVecotors(stone);
                     String water = datas[4].Trim();
-                    //At the end String there are unwanter  characters. one is # and other is a unicode
                     water = water.Substring(0, water.Length - 2);
-                    waters = getVecotors(water);
-                    bordInitialized = false;
-
-
+                    waterList = getVecotors(water);
+                    bordcreated = false;
                 }
                 else if (datas[0].ToUpper().Equals("C"))
                 {
@@ -155,7 +259,6 @@ public class ServerListener : MonoBehaviour
                     int coinValue = Int32.Parse(datas[3]);
                     CoinObject o = new CoinObject(coinPosition, coinValue, coinCountTime);
                     coinsToDraw.Add(o);
-                    //UnityEngine.Debug.logger.Log("Coin   " + coinPosition.x+","+coinPosition.y+" "+coinValue+"  time"+coinCountTime);
 
                 }
                 else if (datas[0].ToUpper().Equals("L"))
@@ -167,20 +270,114 @@ public class ServerListener : MonoBehaviour
                     int healthCountTime = Int32.Parse(datas[2]);
                     HealthObject he = new HealthObject(healthPosition, healthCountTime);
                     healthToDraw.Add(he);
-                    //UnityEngine.Debug.logger.Log("Health   " + healthPosition.x + "," + healthPosition.y + " " + healthCountTime);
                 }
-                // Call an external function (void) given. 
 
-                else if (datas[0].ToUpper().Equals("P2"))
+                else if (datas[0].ToUpper().Equals("G"))
                 {
-                    String[] cod = datas[1].Split(',');
-                    Vector3 healthPosition = new Vector3(Int32.Parse(cod[0]), -Int32.Parse(cod[1]));
-                    datas[2] = datas[2].Trim();
-                    datas[2] = datas[2].Substring(0, datas[2].Length - 2);
-                    int healthCountTime = Int32.Parse(datas[2]);
-                    HealthObject he = new HealthObject(healthPosition, healthCountTime);
-                    healthToDraw.Add(he);
-                    //UnityEngine.Debug.logger.Log("Health   " + healthPosition.x + "," + healthPosition.y + " " + healthCountTime);
+                    var tanks = datas;
+
+                    for (int i = 1; i < tanks.Length - 1; i++)
+                    {
+                        String[] pdata = tanks[i].Split(';');
+                        if (true)
+                        {
+                            /*String[] cod = pdata[1].Split(',');
+
+                            Vector3 pPosition = new Vector3(Int32.Parse(cod[0]), -Int32.Parse(cod[1]));
+                            Quaternion rotation = Quaternion.Euler(0, 0, 0);
+
+                            int pDirection = Int32.Parse(pdata[2]);
+                            if (pDirection == 0)
+                            {
+                                rotation = Quaternion.Euler(0, 0, 0);
+                            }
+                            if (pDirection == 1)
+                            {
+                                rotation = Quaternion.Euler(0, 0, 90);
+                            }
+                            if (pDirection == 2)
+                            {
+                                rotation = Quaternion.Euler(0, 0, 180);
+                            }
+                            if (pDirection == 3)
+                            {
+                                rotation = Quaternion.Euler(0, 0, -90);
+                            }*/
+
+                            String pShot = pdata[3];
+                            String pHealth = pdata[4];
+                            String pCoins = pdata[5];
+                            String pPoints = pdata[6];
+
+                            List<string> temp = new List<string>();
+                            temp.Add(pdata[0]);
+                            temp.Add(pdata[1]);
+                            temp.Add(pdata[2]);
+
+                            toInstanciate.Enqueue(temp);
+
+                            /*if (pdata[0].Equals("P0"))
+                            {
+                                if (P0 != null)
+                                {
+                                    //Destroy(P0);
+                                    toDestroy.Add(P0);
+                                }
+                                //P0 = Instantiate(tank, pPosition, rotation) as GameObject;
+                                toInstanciate.Add(temp);
+                            }
+                            if (pdata[0].Equals("P1"))
+                            {
+                                if (P1 != null)
+                                {
+                                    //Destroy(P1);
+                                    toDestroy.Add(P1);
+                                }
+                                //P1 = Instantiate(tank, pPosition, rotation) as GameObject;
+                                toInstanciate.Add(temp);
+                            }
+                            if (pdata[0].Equals("P2"))
+                            {
+                                if (P2 != null)
+                                {
+                                    //Destroy(P2);
+                                    toDestroy.Add(P2);
+                                }
+                                //P2 = Instantiate(tank, pPosition, rotation) as GameObject
+                                toInstanciate.Add(temp);
+                            }
+                            if (pdata[0].Equals("P3"))
+                            {
+                                if (P3 != null)
+                                {
+                                    //Destroy(P3);
+                                    toDestroy.Add(P3);
+                                }
+                                //P3 = Instantiate(tank, pPosition, rotation) as GameObject;
+                                toInstanciate.Add(temp);
+                            }
+                            if (pdata[0].Equals("P4"))
+                            {
+                                if (P4 != null)
+                                {
+                                    //Destroy(P4
+                                    toDestroy.Add(P4);
+                                }
+                                //P4 = Instantiate(tank, pPosition, rotation) as GameObject;
+                                toInstanciate.Add(temp);
+                            }
+                            if (pdata[0].Equals("P5"))
+                            {
+                                if (P5 != null)
+                                {
+                                    //Destroy(P5);
+                                    toDestroy.Add(P5);
+                                }
+                                //P5 = Instantiate(tank, pPosition, rotation) as GameObject;
+                                toInstanciate.Add(temp);
+                            }*/
+                        }
+                    }
                 }
 
             }
@@ -190,30 +387,34 @@ public class ServerListener : MonoBehaviour
             Console.WriteLine("Exception occured");
         }
     }
-    /*
-    A set off cordinates (2,3:2,4:....) will be passed to this method as a string.
-    This method will decode them and create list of vectors fromt those cordinates..
-    */
-    System.Collections.Generic.List<Vector3> getVecotors(String data)
+    List<Vector3> getVecotors(String data)
     {
         String[] cod = data.Split(';');
-        System.Collections.Generic.List<Vector3> vectors = new System.Collections.Generic.List<Vector3>();
+        List<Vector3> vectors = new List<Vector3>();
 
         foreach (String e in cod)
         {
             String[] d = e.Split(',');
-            //Y is made minus because our grid system in unity is creates as such.
             Vector3 v = new Vector3(Int32.Parse(d[0]), -Int32.Parse(d[1]), 0);
             vectors.Add(v);
         }
         return vectors;
 
     }
+
+    //inner class for coin
     class CoinObject
     {
         Vector3 position;
         int coinValue;
         int timeLeft;
+
+        public CoinObject(Vector3 pos, int coin, int time)
+        {
+            this.position = pos;
+            this.coinValue = coin;
+            this.timeLeft = time;
+        }
         public float getX()
         {
             return position.x;
@@ -234,17 +435,19 @@ public class ServerListener : MonoBehaviour
         {
             return position;
         }
-        public CoinObject(Vector3 pos, int coin, int time)
-        {
-            this.position = pos;
-            this.coinValue = coin;
-            this.timeLeft = time;
-        }
+
     }
+
+    //inner class for health
     class HealthObject
     {
         Vector3 position;
         int timeLeft;
+        public HealthObject(Vector3 pos, int time)
+        {
+            this.position = pos;
+            this.timeLeft = time;
+        }
         public float getX()
         {
             return position.x;
@@ -261,14 +464,9 @@ public class ServerListener : MonoBehaviour
         {
             return timeLeft;
         }
-        public HealthObject(Vector3 pos, int time)
-        {
-            this.position = pos;
-            this.timeLeft = time;
-        }
+
     }
 
 
 }
 
- 
