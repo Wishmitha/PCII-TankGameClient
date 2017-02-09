@@ -6,7 +6,7 @@ Adeesha Jaysooriya
 
 **Description :**
 
-A GUI client developed for the Tank Game Server in CS 2212. (Programming Challenge II) The client is capable is capable of passing messages to the server and display data sent by the server such as map information, player positions details in the local GUI. And it also consists with an algorithm to automatically play the ame against the joined player to the server.
+A GUI client developed for the Tank Game Server in CS 2212. (Programming Challenge II) The client is capable is capable of passing messages to the server and display data sent by the server such as map information, player positions details in the local GUI. And it also consists with an algorithm to automatically play the game against the joined player to the server.
 
 **Implementation :**
 
